@@ -15,6 +15,7 @@ class DataTransformation:
     def __init__(self, data_transformation_config: DataTransformationConfig, data_ingestion_artifacts: DataIngestionArtifacts):
         self.data_transformation_config = data_transformation_config
         self.data_ingestion_artifacts = data_ingestion_artifacts
+        self.stemmer = PorterStemmer()
 
     def load_data(self):
         train_data = pd.read_csv(self.data_ingestion_artifacts.train_csv_file_path, header=0,
@@ -50,6 +51,13 @@ class DataTransformation:
         
         def remove_numbers(tokens):
             return [word for word in tokens if not word.isdigit()]
+        
+        def stem_words(tokens):
+            return [self.stemmer.stem(word) for word in tokens]
+        
+        def remove_extra_words(tokens):
+            extra_words = ['href', 'lt', 'gt', 'ii', 'iii', 'ie', 'quot', 'com']
+            return [word for word in tokens if word not in extra_words]
 
         # Applying transformations step by step
         text_series = text_series.apply(remove_html_tags)
@@ -58,6 +66,8 @@ class DataTransformation:
         text_series = text_series.apply(remove_stopwords)
         text_series = text_series.apply(remove_punctuation)
         text_series = text_series.apply(remove_numbers)
+        text_series = text_series.apply(stem_words)
+        text_series = text_series.apply(remove_extra_words)
         
         return text_series.apply(lambda tokens: ' '.join(tokens))
 
