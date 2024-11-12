@@ -3,7 +3,7 @@ from news.logger import logging
 from news.exception import CustomException
 from news.components.data_ingestion import DataIngestion
 from news.components.data_validation import DataValidation
-from news.components.data_transforamation import DataTransformation
+from news.components.data_transformation import DataTransformation
 from news.configuration.s3_operations import S3Operation
 from news.constants import *
 
