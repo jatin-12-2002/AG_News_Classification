@@ -1,5 +1,7 @@
 numpy 
 pandas
+ipykernel
+transformers
 matplotlib
 seaborn
 nltk
@@ -12,5 +14,8 @@ mypy-boto3-s3
 fastapi==0.78.0
 uvicorn==0.18.3
 Jinja2==3.1.2
+torch  --extra-index-url https://download.pytorch.org/whl/cpu
 
 -e .
+
+# pip install torch  --extra-index-url https://download.pytorch.org/whl/cpu
