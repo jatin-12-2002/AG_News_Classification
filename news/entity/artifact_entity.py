@@ -20,3 +20,11 @@ class DataValidationArtifacts:
 class DataTransformationArtifacts:
     transformed_train_data_path: str       # Path to the transformed training data
     transformed_test_data_path: str        # Path to the transformed test data
+
+
+# Model Trainer Artifacts
+@dataclass
+class ModelTrainerArtifacts: 
+    trained_model_path:str
+    x_test_path: list
+    y_test_path: list

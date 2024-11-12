@@ -44,3 +44,27 @@ TITLE = "title"
 DESCRIPTION = "description"
 LABEL = 'label'
 TEXT = 'text'
+
+
+"""
+Model Trainer realted contant start with MODEL_TRAINER VAR NAME
+"""
+
+MODEL_TRAINER_ARTIFACTS_DIR = 'ModelTrainerArtifacts'
+TRAINED_MODEL_DIR = 'trained_model'
+TRAINED_MODEL_NAME = 'model.h5'
+X_TEST_FILE_NAME = 'x_test.csv'
+Y_TEST_FILE_NAME = 'y_test.csv'
+
+X_TRAIN_FILE_NAME = 'x_train.csv'
+
+RANDOM_STATE = 42
+EPOCH = 1
+BATCH_SIZE = 128
+VALIDATION_SPLIT = 0.2
+
+
+# Model Architecture constants
+MODEL_NAME = 'roberta-base'
+NUM_LABELS = 4
+NUMBER_OF_LAYERS = 4
