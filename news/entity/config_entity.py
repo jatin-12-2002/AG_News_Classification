@@ -44,16 +44,25 @@ class DataTransformationConfig:
 @dataclass
 class ModelTrainerConfig: 
     def __init__(self):
-        self.TRAINED_MODEL_DIR: str = os.path.join(os.getcwd(),ARTIFACTS_DIR,MODEL_TRAINER_ARTIFACTS_DIR) 
-        self.TRAINED_MODEL_PATH = os.path.join(self.TRAINED_MODEL_DIR,TRAINED_MODEL_NAME)
-        self.X_TEST_DATA_PATH = os.path.join(self.TRAINED_MODEL_DIR, X_TEST_FILE_NAME)
-        self.Y_TEST_DATA_PATH = os.path.join(self.TRAINED_MODEL_DIR, Y_TEST_FILE_NAME)
-        self.X_TRAIN_DATA_PATH = os.path.join(self.TRAINED_MODEL_DIR, X_TRAIN_FILE_NAME)
+        self.TRAINED_MODEL_DIR: str = os.path.join(ARTIFACTS_DIR,MODEL_TRAINER_ARTIFACTS_DIR) 
+        self.TRAINED_MODEL_PATH = os.path.join(self.TRAINED_MODEL_DIR,MODEL_TRAINER_MODEL_SAVE_PATH)
+        self.ACCURACY = MODEL_TRAINER_METRICS[0]
+        self.F1 = MODEL_TRAINER_METRICS[1]
+
+        self.LEARNING_RATE = LEARNING_RATE
+        self.EPOCHS = EPOCHS
+        self.TRAIN_BATCH_SIZE = TRAIN_BATCH_SIZE
+        self.EVAL_BATCH_SIZE = EVAL_BATCH_SIZE
+        self.WEIGHT_DECAY = WEIGHT_DECAY
+        self.LOGGING_STEPS = LOGGING_STEPS
+        self.SAVE_STRATEGY = SAVE_STRATEGY
+        self.EVAL_STRATEGY = EVAL_STRATEGY
+        self.MAX_SEQ_LENGTH = MAX_SEQ_LENGTH
+        self.LABEL = LABEL
+        self.TEXT = TEXT
+        self.AXIS = AXIS
+        self.PADDING = PADDING
+
         self.MODEL_NAME = MODEL_NAME
         self.NUM_LABELS = NUM_LABELS
         self.NUMBER_OF_LAYERS = NUMBER_OF_LAYERS
-        self.LABEL = LABEL
-        self.TITLE = TITLE
-        self.RANDOM_STATE = RANDOM_STATE
-        self.EPOCH = EPOCH
-        self.BATCH_SIZE = BATCH_SIZE

@@ -2,9 +2,11 @@ numpy
 pandas
 ipykernel
 transformers
+datasets
 matplotlib
 seaborn
 nltk
+accelerate
 regex
 scikit-learn
 from-root

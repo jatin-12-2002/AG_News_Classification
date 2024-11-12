@@ -51,18 +51,21 @@ Model Trainer realted contant start with MODEL_TRAINER VAR NAME
 """
 
 MODEL_TRAINER_ARTIFACTS_DIR = 'ModelTrainerArtifacts'
-TRAINED_MODEL_DIR = 'trained_model'
-TRAINED_MODEL_NAME = 'model.h5'
-X_TEST_FILE_NAME = 'x_test.csv'
-Y_TEST_FILE_NAME = 'y_test.csv'
+MODEL_TRAINER_MODEL_SAVE_PATH = "final_model"
+MODEL_TRAINER_METRICS = ["accuracy","f1"]
 
-X_TRAIN_FILE_NAME = 'x_train.csv'
-
-RANDOM_STATE = 42
-EPOCH = 1
-BATCH_SIZE = 128
-VALIDATION_SPLIT = 0.2
-
+LEARNING_RATE = 1e-5
+EPOCHS = 1
+TRAIN_BATCH_SIZE = 16
+EVAL_BATCH_SIZE = 16
+WEIGHT_DECAY = 0.1
+LOGGING_STEPS = 1000
+SAVE_STRATEGY = "epoch"
+EVAL_STRATEGY = "epoch"
+MAX_SEQ_LENGTH = 128  # Max length for tokenization
+METRICS = ["accuracy","f1"]
+AXIS = 1
+PADDING = "max_length"
 
 # Model Architecture constants
 MODEL_NAME = 'roberta-base'
