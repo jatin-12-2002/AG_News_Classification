@@ -27,3 +27,16 @@ class DataValidationConfig:
         self.data_validation_dir: str = os.path.join(ARTIFACTS_DIR, DATA_VALIDATION_ARTIFACTS_DIR)
         self.valid_status_file_dir: str = os.path.join(self.data_validation_dir, DATA_VALIDATION_STATUS_FILE)
         self.required_file_list = DATA_VALIDATION_ALL_REQUIRED_FILES
+
+
+@dataclass
+class DataTransformationConfig:
+    def __init__(self):
+        self.data_transformation_artifacts_dir: str = os.path.join(ARTIFACTS_DIR, DATA_TRANSFORMATION_ARTIFACTS_DIR)
+        self.df_train_path: str = os.path.join(self.data_transformation_artifacts_dir, DATA_TRANSFORMATION_TRAIN_TRANSFORMED_FILE)
+        self.df_test_path: str = os.path.join(self.data_transformation_artifacts_dir, DATA_TRANSFORMATION_TEST_TRANSFORMED_FILE)
+        self.CLASS = CLASS
+        self.TITLE = TITLE
+        self.DESCRIPTION = DESCRIPTION 
+        self.LABEL = LABEL
+        self.TEXT = TEXT

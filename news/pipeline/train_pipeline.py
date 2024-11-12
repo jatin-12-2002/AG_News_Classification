@@ -3,20 +3,24 @@ from news.logger import logging
 from news.exception import CustomException
 from news.components.data_ingestion import DataIngestion
 from news.components.data_validation import DataValidation
+from news.components.data_transforamation import DataTransformation
 from news.configuration.s3_operations import S3Operation
 from news.constants import *
 
 from news.entity.config_entity import (DataIngestionConfig,
-                                       DataValidationConfig)
+                                       DataValidationConfig,
+                                       DataTransformationConfig)
 
 from news.entity.artifact_entity import (DataIngestionArtifacts,
-                                         DataValidationArtifacts)
+                                         DataValidationArtifacts,
+                                         DataTransformationArtifacts)
 
 class TrainPipeline:
     def __init__(self):
         self.data_ingestion_config = DataIngestionConfig()
         self.data_validation_config = DataValidationConfig()
         self.data_ingestion_config = DataIngestionConfig()
+        self.data_transformation_config = DataTransformationConfig()
         self.awscloud = S3Operation()
 
     
@@ -65,6 +69,23 @@ class TrainPipeline:
             raise CustomException(e, sys) from e
         
     
+    def start_data_transformation(self, data_ingestion_artifacts = DataIngestionArtifacts) -> DataTransformationArtifacts:
+        logging.info("Entered the start_data_transformation method of TrainPipeline class")
+        try:
+            data_transformation = DataTransformation(
+                data_ingestion_artifacts = data_ingestion_artifacts,
+                data_transformation_config=self.data_transformation_config
+            )
+
+            data_transformation_artifacts = data_transformation.initiate_data_transformation()
+            
+            logging.info("Exited the start_data_transformation method of TrainPipeline class")
+            return data_transformation_artifacts
+
+        except Exception as e:
+            raise CustomException(e, sys) from e
+        
+    
     def run_pipeline(self):
         logging.info("Entered the run_pipeline method of TrainPipeline class")
         try:
@@ -79,6 +100,13 @@ class TrainPipeline:
                 data_ingestion_artifact=data_ingestion_artifacts
             )
             print(f">>>>>> stage DATA VALIDATION completed <<<<<<\n\nx==========x")
+
+            print(f"*******************")
+            print(f">>>>>> stage DATA TRANSFORMATION started <<<<<<")
+            data_transformation_artifacts = self.start_data_transformation(
+                data_ingestion_artifacts=data_ingestion_artifacts
+            )
+            print(f">>>>>> stage DATA TRANSFORMATION completed <<<<<<\n\nx==========x")
 
             logging.info("Exited the run_pipeline method of TrainPipeline class") 
 
