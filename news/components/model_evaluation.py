@@ -12,7 +12,6 @@ from typing import Dict
 from news.constants import *
 from news.configuration.s3_operations import S3Operation
 from sklearn.metrics import accuracy_score, f1_score
-from safetensors import safe_open
 from news.entity.config_entity import ModelEvaluationConfig, ModelTrainerConfig
 from news.entity.artifact_entity import ModelEvaluationArtifacts, ModelTrainerArtifacts, DataTransformationArtifacts
 from news.ml.model import RobertaModel

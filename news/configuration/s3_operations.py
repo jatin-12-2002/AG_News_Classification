@@ -54,6 +54,8 @@ class S3Operation:
             
             # Download each object in the folder
             for obj in objects:
+                if obj.key.endswith("/"):  # Skip folders
+                    continue
                 # Get the relative path for the file in the folder structure
                 relative_path = os.path.relpath(obj.key, folder_key)
                 local_file_path = os.path.join(local_dir, relative_path)
@@ -253,26 +255,34 @@ class S3Operation:
         except Exception as e:
             raise CustomException(e, sys) from e
 
-    def upload_folder(self, folder_name: str, bucket_name: str) -> None:
-
+    def upload_folder(self, folder_name: str, bucket_name: str, bucket_folder_name: str) -> None:
         """
-        Method Name :   upload_file
+        Uploads the entire folder to S3, preserving the directory structure.
 
-        Description :   This method uploads the from_filename file to bucket_name bucket with to_filename as bucket filename
-        
-        Output      :   Folder is created in s3 bucket
+        :param folder_name: Path to the local folder to upload.
+        :param bucket_name: Name of the S3 bucket.
+        :param bucket_folder_name: Path in the bucket where the folder will be uploaded.
         """
         logging.info("Entered the upload_folder method of S3Operations class")
         try:
-            lst = os.listdir(folder_name)
-            for f in lst:
-                local_f = os.path.join(folder_name, f)
-                dest_f = f
-                self.upload_file(local_f, dest_f, bucket_name, remove=False)
-            logging.info("Exited the upload_folder method of S3Operations class")
-
+            for root, _, files in os.walk(folder_name):
+                for file in files:
+                    local_file_path = os.path.join(root, file)
+                    # Compute the relative path for the file
+                    relative_path = os.path.relpath(local_file_path, folder_name)
+                    # Form the destination path in S3
+                    s3_file_path = os.path.join(bucket_folder_name, relative_path).replace("\\", "/")  # Ensure S3-compatible paths
+                    # Upload the file
+                    self.upload_file(
+                        from_filename=local_file_path,
+                        to_filename=s3_file_path,
+                        bucket_name=bucket_name,
+                        remove=False,
+                    )
+            logging.info(f"Successfully uploaded folder {folder_name} to {bucket_name}/{bucket_folder_name}")
         except Exception as e:
             raise CustomException(e, sys) from e
+
 
     def upload_df_as_csv(
         self,

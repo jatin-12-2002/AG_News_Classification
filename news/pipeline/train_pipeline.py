@@ -6,6 +6,7 @@ from news.components.data_validation import DataValidation
 from news.components.data_transformation import DataTransformation
 from news.components.model_trainer import ModelTrainer
 from news.components.model_evaluation import ModelEvaluation
+from news.components.model_pusher import ModelPusher
 from news.configuration.s3_operations import S3Operation
 from news.constants import *
 
@@ -13,13 +14,15 @@ from news.entity.config_entity import (DataIngestionConfig,
                                        DataValidationConfig,
                                        DataTransformationConfig,
                                        ModelTrainerConfig,
-                                       ModelEvaluationConfig)
+                                       ModelEvaluationConfig,
+                                       ModelPusherConfig)
 
 from news.entity.artifact_entity import (DataIngestionArtifacts,
                                          DataValidationArtifacts,
                                          DataTransformationArtifacts,
                                          ModelTrainerArtifacts,
-                                         ModelEvaluationArtifacts)
+                                         ModelEvaluationArtifacts,
+                                         ModelPusherArtifacts)
 
 class TrainPipeline:
     def __init__(self):
@@ -28,6 +31,7 @@ class TrainPipeline:
         self.data_transformation_config = DataTransformationConfig()
         self.model_trainer_config = ModelTrainerConfig()
         self.model_evaluation_config = ModelEvaluationConfig()
+        self.model_pusher_config = ModelPusherConfig()
         self.awscloud = S3Operation()
 
     
@@ -125,6 +129,21 @@ class TrainPipeline:
 
         except Exception as e:
             raise CustomException(e, sys) from e
+
+    def start_model_pusher(self,) -> ModelPusherArtifacts:
+        logging.info("Entered the start_model_pusher method of TrainPipeline class")
+        try:
+            model_pusher = ModelPusher(
+                model_pusher_config=self.model_pusher_config,
+            )
+            model_pusher_artifact = model_pusher.initiate_model_pusher()
+            logging.info("Initiated the model pusher")
+            logging.info("Exited the start_model_pusher method of TrainPipeline class")
+            return model_pusher_artifact
+
+        except Exception as e:
+            raise CustomException(e, sys) from e
+        
     
     def run_pipeline(self):
         logging.info("Entered the run_pipeline method of TrainPipeline class")
@@ -141,34 +160,38 @@ class TrainPipeline:
             )
             print(f">>>>>> stage DATA VALIDATION completed <<<<<<\n\nx==========x")
 
-            print(f"*******************")
-            print(f">>>>>> stage DATA TRANSFORMATION started <<<<<<")
-            data_transformation_artifacts = self.start_data_transformation(
-                data_ingestion_artifacts=data_ingestion_artifacts
-            )
-            print(f">>>>>> stage DATA TRANSFORMATION completed <<<<<<\n\nx==========x")
+            if data_validation_artifact.validation_status == True:
+                print(f"*******************")
+                print(f">>>>>> stage DATA TRANSFORMATION started <<<<<<")
+                data_transformation_artifacts = self.start_data_transformation(
+                    data_ingestion_artifacts=data_ingestion_artifacts
+                )
+                print(f">>>>>> stage DATA TRANSFORMATION completed <<<<<<\n\nx==========x")
 
-            print(f"*******************")
-            print(f">>>>>> stage MODEL TRAINING started <<<<<<")
-            model_trainer_artifacts = self.start_model_trainer(
-                data_transformation_artifacts=data_transformation_artifacts
-            )
-            print(f">>>>>> stage MODEL TRAINING completed <<<<<<\n\nx==========x")
-            print(f"*******************")
+                print(f"*******************")
+                print(f">>>>>> stage MODEL TRAINING started <<<<<<")
+                model_trainer_artifacts = self.start_model_trainer(
+                    data_transformation_artifacts=data_transformation_artifacts
+                )
+                print(f">>>>>> stage MODEL TRAINING completed <<<<<<\n\nx==========x")
+                print(f"*******************")
 
-            print(f">>>>>> stage MODEL EVALUATION started <<<<<<")   
-            model_evaluation_artifacts = self.start_model_evaluation(model_trainer_artifacts=model_trainer_artifacts,
-                                                                    data_transformation_artifacts=data_transformation_artifacts,
-                                                                    model_trainer_config=self.model_trainer_config
-            )
+                print(f">>>>>> stage MODEL EVALUATION started <<<<<<")   
+                model_evaluation_artifacts = self.start_model_evaluation(model_trainer_artifacts=model_trainer_artifacts,
+                                                                        data_transformation_artifacts=data_transformation_artifacts,
+                                                                        model_trainer_config=self.model_trainer_config
+                )
 
-            if not model_evaluation_artifacts.is_model_accepted:
-                raise Exception("Trained model is not better than the best model")
-            print(f">>>>>> stage MODEL EVALUATION completed <<<<<<\n\nx==========x")
-            print(f"*******************")
+                if not model_evaluation_artifacts.is_model_accepted:
+                    raise Exception("Trained model is not better than the best model")
+                print(f">>>>>> stage MODEL EVALUATION completed <<<<<<\n\nx==========x")
+                print(f"*******************")
 
+                print(f">>>>>> stage MODEL PUSHER started <<<<<<") 
+                model_pusher_artifacts = self.start_model_pusher()
+                print(f">>>>>> stage MODEL PUSHER completed <<<<<<\n\nx==========x")
 
-            logging.info("Exited the run_pipeline method of TrainPipeline class") 
+                logging.info("Exited the run_pipeline method of TrainPipeline class") 
 
         except Exception as e:
             raise CustomException(e, sys) from e
