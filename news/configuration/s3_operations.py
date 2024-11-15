@@ -217,6 +217,24 @@ class S3Operation:
                 pass
             logging.info("Exited the create_folder method of S3Operations class")
 
+
+    def check_folder_exists(self, folder_key, bucket_name):
+        """
+        Check if a folder exists in the specified S3 bucket.
+        """
+        try:
+            logging.info(f"Checking if folder '{folder_key}' exists in bucket '{bucket_name}'")
+            response = self.s3_client.list_objects_v2(
+                Bucket=bucket_name,
+                Prefix=folder_key
+            )
+            exists = 'Contents' in response
+            logging.info(f"Folder '{folder_key}' exists: {exists}")
+            return exists
+        except Exception as e:
+            raise CustomException(e, sys) from e
+    
+    
     def upload_file(
         self,
         from_filename: str,
