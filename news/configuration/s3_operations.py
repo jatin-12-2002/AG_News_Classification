@@ -33,7 +33,41 @@ class S3Operation:
             else:
                 # Re-raise the exception if it's a different error
                 raise
+    
 
+    def download_folder(self, folder_key: str, bucket_name: str, local_dir: str) -> None:
+        """
+        Downloads all files within a specified S3 "folder" to a local directory.
+
+        :param folder_key: Prefix in the S3 bucket that acts as the folder path.
+        :param bucket_name: Name of the S3 bucket.
+        :param local_dir: Local directory where the files should be downloaded.
+        """
+        try:
+            bucket = self.get_bucket(bucket_name)
+            objects = list(bucket.objects.filter(Prefix=folder_key))
+            
+            # Check if the folder exists in S3 (if no objects are found)
+            if not objects:
+                logging.info(f"Folder {folder_key} not found in bucket {bucket_name}. Proceeding without download.")
+                return
+            
+            # Download each object in the folder
+            for obj in objects:
+                # Get the relative path for the file in the folder structure
+                relative_path = os.path.relpath(obj.key, folder_key)
+                local_file_path = os.path.join(local_dir, relative_path)
+                
+                # Create local directories if they don't exist
+                os.makedirs(os.path.dirname(local_file_path), exist_ok=True)
+                
+                # Download the file from S3 to the local directory
+                bucket.download_file(obj.key, local_file_path)
+                logging.info(f"Downloaded {obj.key} to {local_file_path}")
+
+        except Exception as e:
+            raise CustomException(e, sys) from e
+    
 
     @staticmethod
     def read_object(

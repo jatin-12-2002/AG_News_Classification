@@ -8,7 +8,6 @@ ARTIFACTS_DIR = os.path.join("artifacts", TIMESTAMP)
 LOGS_DIR = "logs"
 LOGS_FILE_NAME = "news.log"
 MODELS_DIR = "models"
-BEST_MODEL_DIR = "best_model"
 
 
 """
@@ -71,3 +70,11 @@ PADDING = "max_length"
 MODEL_NAME = 'roberta-base'
 NUM_LABELS = 4
 NUMBER_OF_LAYERS = 4
+
+
+"""
+Model EVALUATION realted contant start with MODEL_EVALUATION VAR NAME
+"""
+MODEL_EVALUATION_ARTIFACTS_DIR = 'ModelEvaluationArtifacts'
+BEST_MODEL_DIR = "best_model"
+MODEL_EVALUATION_FILE_NAME = 'model_evaluation.csv'

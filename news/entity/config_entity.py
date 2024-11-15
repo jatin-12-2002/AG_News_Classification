@@ -66,3 +66,14 @@ class ModelTrainerConfig:
         self.MODEL_NAME = MODEL_NAME
         self.NUM_LABELS = NUM_LABELS
         self.NUMBER_OF_LAYERS = NUMBER_OF_LAYERS
+
+
+@dataclass
+class ModelEvaluationConfig: 
+    def __init__(self):
+        self.MODEL_EVALUATION_MODEL_DIR: str = os.path.join(ARTIFACTS_DIR, MODEL_EVALUATION_ARTIFACTS_DIR)
+        self.BEST_MODEL_DIR_PATH: str = os.path.join(self.MODEL_EVALUATION_MODEL_DIR,BEST_MODEL_DIR)
+        self.MODEL_EVALUATION_FILE_NAME = os.path.join(self.MODEL_EVALUATION_MODEL_DIR, MODEL_EVALUATION_FILE_NAME)
+        self.BUCKET_NAME = BUCKET_NAME 
+        self.MODEL_NAME = MODEL_NAME
+        self.EVAL_BATCH_SIZE = EVAL_BATCH_SIZE

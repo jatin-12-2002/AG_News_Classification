@@ -2,7 +2,7 @@ import os, sys
 import torch
 import pandas as pd
 from transformers import TrainingArguments, Trainer
-from datasets import Dataset, load_from_disk
+from datasets import Dataset
 import numpy as np
 from sklearn.metrics import accuracy_score, f1_score
 from typing import Dict
