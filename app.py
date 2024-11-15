@@ -1,14 +1,19 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.responses import RedirectResponse
 from fastapi.responses import Response
+from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 from uvicorn import run as app_run
 from train import training as start_training
 from news.pipeline.prediction_pipeline import PredictionPipeline
-from news.constants import APP_HOST, APP_PORT
+from news.constants import *
 
 # Initialize the FastAPI app
 app = FastAPI()
+
+# Serve static files
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Allow cross-origin requests
 origins = ["*"]
@@ -21,10 +26,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Root endpoint to redirect to API docs
-@app.get("/", tags=["authentication"])
-async def index():
-    return RedirectResponse(url="/docs")
+@app.get("/", response_class=HTMLResponse)
+async def home():
+    """
+    Serve the frontend HTML file.
+    """
+    return FileResponse("templates/index.html")
 
 # Endpoint for training the model
 @app.get("/train", tags=["training"])
@@ -35,23 +42,27 @@ async def training():
     try:
         start_training()
 
-        return Response("Training completed successfully!")
+        return JSONResponse(content={"message": "Training started successfully!"})
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error occurred during training: {e}")
 
 # Endpoint for making predictions
 @app.post("/predict", tags=["prediction"])
-async def predict_route(text: str):
+async def predict_route(request: Request):
     """
     Predict the label for the provided text input.
     """
     try:
+        data = await request.json()
+        text = data.get("text", "").strip()
+
         if not text.strip():
             raise HTTPException(status_code=400, detail="Input text cannot be empty.")
 
         prediction_pipeline = PredictionPipeline()
-        predictions = prediction_pipeline.run_pipeline([text])  # Accepting a single input as a list
-        return predictions[0]  # Returning the prediction for the first (and only) text
+        prediction = prediction_pipeline.run_pipeline([text])[0]  # Single input prediction
+        return JSONResponse(content=prediction)  # Returning the prediction for the first (and only) text
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error occurred during prediction: {e}")
