@@ -108,7 +108,7 @@ class PredictionPipeline:
             ]
             
             logging.info("Prediction process completed successfully")
-            return [{"label": label, "confidence": confidence.item()} for label, confidence in zip(predicted_labels, confidence_scores)]
+            return predicted_labels
         
         except Exception as e:
             raise CustomException(e, sys) from e
