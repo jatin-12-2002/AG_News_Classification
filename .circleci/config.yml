@@ -35,7 +35,7 @@ jobs:
 
   continuous-delivery:
     machine: true
-    resource_class: jatin-12-2002/newsrunner
+    resource_class: medium
     steps:
       - checkout
 
