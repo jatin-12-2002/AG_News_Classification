@@ -6,12 +6,12 @@ orbs:
 
 jobs:
   machine: true
-    resource_class: jatin-12-2002/newsrun
-    steps:
-      - checkout
-      - run:
-          name: Verify Runner
-          command: echo "Hello from the self-hosted runner!"
+  resource_class: jatin-12-2002/newsrun
+  steps:
+    - checkout
+    - run:
+        name: Verify Runner
+        command: echo "Hello from the self-hosted runner!"
   continuous-integration:
     docker:
       - image: cimg/base:stable
