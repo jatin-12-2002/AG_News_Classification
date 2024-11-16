@@ -5,14 +5,14 @@ orbs:
   aws-cli: circleci/aws-cli@3.1.4
 
 jobs:
-  machine: true
-  resource_class: jatin-12-2002/newsrunner
-  steps:
-    - checkout
-    - run:
-        name: Verify Runner
-        command: echo "Hello from the self-hosted runner!"
   continuous-integration:
+    machine: true
+    resource_class: jatin-12-2002/newsrunner
+    steps:
+      - checkout
+      - run:
+          name: Verify Runner
+          command: echo "Hello from the self-hosted runner!"
     docker:
       - image: cimg/base:stable
     resource_class: medium
