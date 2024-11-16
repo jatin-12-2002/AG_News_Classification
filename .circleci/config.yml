@@ -6,7 +6,7 @@ orbs:
 
 jobs:
   machine: true
-  resource_class: jatin-12-2002/newsrun
+  resource_class: jatin-12-2002/newsrunner
   steps:
     - checkout
     - run:
@@ -42,7 +42,7 @@ jobs:
 
   continuous-delivery:
     machine: true
-    resource_class: jatin-12-2002/newsrun
+    resource_class: jatin-12-2002/newsrunner
     steps:
       - checkout
 
