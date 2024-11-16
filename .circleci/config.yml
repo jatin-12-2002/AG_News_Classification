@@ -25,7 +25,7 @@ jobs:
 
   continuous-delivery:
     machine: true
-    resource_class: kdot313/newsrun
+    resource_class: jatin-12-2002/newsrun
     steps:
       - aws-cli/setup
 
