@@ -6,8 +6,8 @@ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o 
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt update
 curl -fsSL https://get.docker.com -o get-docker.sh
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 sudo sh get-docker.sh
-
 
 
 # Add cloud user to docker group
@@ -43,7 +43,7 @@ sudo nano /etc/opt/circleci/launch-agent-config.yaml
 
 # Add API in the file and change permissions
 api:
-  auth_token: 2ea632bf09f32d18f56c46a1b8596550cca6b485d5ca3d226ca444cdef384b6204ac23f42bc0aae2
+  auth_token: 5b719dde7cd17f4d9d103673ffe4e755f36393022c9b2bde3a387ea8669b02854b7518033597b97c
 
 runner:
   name: self-hosted
