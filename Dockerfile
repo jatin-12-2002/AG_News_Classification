@@ -16,5 +16,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Expose necessary ports (FastAPI: 8080, Redis: 6379)
 EXPOSE 8080 6379
 
-# Start Redis server and FastAPI app
-CMD bash -c "redis-server --daemonize yes && uvicorn app:app --host 0.0.0.0 --port 8080"
+# Start Supervisor to manage all processes
+CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
