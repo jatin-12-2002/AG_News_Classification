@@ -13,7 +13,7 @@ LOGS_FILE_NAME = "news.log"
 Data INGESTION realted contant start with DATA_INGESTION VAR NAME
 """
 BUCKET_NAME = 'agnews-data'
-AWS_DATA_FILE_NAME = "archive_mini.zip"
+AWS_DATA_FILE_NAME = "archive.zip"
 DATA_INGESTION_ARTIFACTS_DIR = "DataIngestionArtifacts"
 DATA_INGESTION_TRAIN_FILE_DIR = "train.csv"
 DATA_INGESTION_TEST_FILE_DIR = "test.csv"
