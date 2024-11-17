@@ -37,9 +37,9 @@ The project includes a user-friendly **frontend** developed using **HTML, CSS, a
 
 ## Infrastructure
 - **Containerization**: DockerHub
-- **Deployment**: AWS Elastic Container Registry (ECR)
+- **Deployment**: AWS Elastic Container Registry (ECR), EC2, and S3 for deployment and storage.
 - **Version Control**: GitHub
-- **CI/CD Pipeline**: CircleCI (CI/CD)
+- **CI/CD Pipeline**: CircleCI (CI/CD automation)
 
 ## System Design
 ![image](./assets/SystemDesign.jpg)
@@ -176,7 +176,7 @@ redis-cli ping
 ### Step 13 (Optional): Add best_model folder in your Project structure
 Follow this Step if you don't want to train model for 50 epochs as It will take a long time to complete training. I had already trained model named as **best_model** folder for 50 epochs.
 
-As **best_model** folder is very large in size(500 MB), So I cannot push it into github repository directly. So, you had to update it manually in and you had to keep it in your Project structure.
+As **best_model** folder is very large in size(500 MB), So I cannot push it into github repository directly. So, you had to update it manually and you had to keep it in your Project structure.
 
 You can download the **best_model** folder from [here](https://drive.google.com/drive/folders/1BeTokrRsgHxum9kzpcIfASl4E2okYWbp?usp=sharing)
 
