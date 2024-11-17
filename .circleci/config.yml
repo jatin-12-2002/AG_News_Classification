@@ -18,7 +18,7 @@ jobs:
           platform: linux/amd64
           push-image: true
           region: '${AWS_REGION}'
-          repo: hate
+          repo: agnews
           registry-id: AWS_ECR_REGISTRY_ID
           repo-scan-on-push: true
           tag: latest
