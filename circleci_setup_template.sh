@@ -6,7 +6,6 @@ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o 
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt update
 curl -fsSL https://get.docker.com -o get-docker.sh
-sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 sudo sh get-docker.sh
 
 
@@ -43,7 +42,7 @@ sudo nano /etc/opt/circleci/launch-agent-config.yaml
 
 # Add API in the file and change permissions
 api:
-  auth_token: b82aebe36b9b8e6069e58ebd040d5d868f7380f2fc642d9dbc47a47446da78f766d4b587a262ebd4
+  auth_token: 94b260bde3104ab943fc3fe3329bd084f835173fdf3f339262f381fc8ca05e8b8b9b70828e10c32d
 
 runner:
   name: self-hosted

@@ -1,9 +1,7 @@
 version: 2.1
-
 orbs:
   aws-ecr: circleci/aws-ecr@8.2.1
   aws-cli: circleci/aws-cli@3.1.4
-
 jobs:
   continuous-integration:
     docker:
@@ -13,14 +11,6 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
 
-      - checkout
-
-      - run:
-          name: Install dependencies
-          command: |
-            sudo apt-get update -y
-            sudo apt-get install -y docker-ce docker-ce-cli containerd.io
-
       - aws-ecr/build-and-push-image:
           create-repo: true
           dockerfile: Dockerfile
@@ -28,38 +18,34 @@ jobs:
           platform: linux/amd64
           push-image: true
           region: '${AWS_REGION}'
-          repo: demo
+          repo: hate
           registry-id: AWS_ECR_REGISTRY_ID
           repo-scan-on-push: true
           tag: latest
 
   continuous-delivery:
     machine: true
-    resource_class: medium
+    resource_class: jatin-12-2002/newsrun
     steps:
-      - checkout
-
       - aws-cli/setup
 
       - run:
-          name: Authenticate to AWS ECR
-          command: |
-            aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ECR_REGISTRY_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
+          name: auth to aws ecr
+          command: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 022499021177.dkr.ecr.us-east-1.amazonaws.com
+          
 
       - run:
-          name: Pull Docker Image from ECR
-          command: |
-            docker pull ${AWS_ECR_REGISTRY_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/demo:latest
-
+          name: pull image from private repository
+          command: docker pull 022499021177.dkr.ecr.us-east-1.amazonaws.com/agnews:latest
+          
+      
       - run:
-          name: Run Docker Container
-          command: |
-            docker run -d -p 8080:8080 -p 6379:6379 ${AWS_ECR_REGISTRY_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/demo:latest
-
+          name: run image
+          command: docker run -d -p 8080:8080 -p 6379:6379 022499021177.dkr.ecr.us-east-1.amazonaws.com/agnews:latest
 workflows:
   CICD:
     jobs:
       - continuous-integration
       - continuous-delivery:
           requires:
-            - continuous-integration
+          - continuous-integration
