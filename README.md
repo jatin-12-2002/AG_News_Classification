@@ -68,7 +68,7 @@ This dataset, curated by Xiang Zhang, includes four major news categories extrac
 
 - **classes.txt**: Lists the four categories.
 
-- **train.csv and test.csv**: Contain labeled news articles with columns for the class index (1–4), title, and description.
+- **train.csv and test.csv**: Contains labeled news articles with columns for the class index (1–4), title, and description.
 
 - **Formatting**: Titles and descriptions are enclosed in double quotes (") with internal double quote is escaped by 2 double quotes (""). Line breaks are represented as \n.
 
@@ -150,12 +150,12 @@ archive.zip
 
 * **Here is my Datset Zip: [LINK](data/archive.zip)**
 
-### Step 8 - Upload the Dataset zip file to your S3 Bucket.
+### Step 9: Upload the Dataset zip file to your S3 Bucket.
 ```bash
 aws s3 cp path/to/your/archive.zip s3://your-bucket-name/archive.zip
 ```
 
-### Step 9: Install Redis.
+### Step 10: Install Redis.
 ```bash
 sudo apt-get update
 ```
@@ -163,44 +163,44 @@ sudo apt-get update
 sudo apt-get install redis-server
 ```
 
-### Step 10: Start the Redis Server(usually done on port 6379 by default).
+### Step 11: Start the Redis Server(usually done on port 6379 by default).
 ```bash
 sudo service redis-server start
 ```
 
-### Step 11: Check if Redis is running. It should return **PONG** if everything is working fine.
+### Step 12: Check if Redis is running. It should return **PONG** if everything is working fine.
 ```bash
 redis-cli ping
 ```
 
-### Step 12 (Optional)- Add best_model folder in your Project structure
+### Step 13 (Optional): Add best_model folder in your Project structure
 Follow this Step if you don't want to train model for 50 epochs as It will take a long time to complete training. I had already trained model named as **best_model** folder for 50 epochs.
 
 As **best_model** folder is very large in size(500 MB), So I cannot push it into github repository directly. So, you had to update it manually in and you had to keep it in your Project structure.
 
 You can download the **best_model** folder from [here](https://drive.google.com/drive/folders/1BeTokrRsgHxum9kzpcIfASl4E2okYWbp?usp=sharing)
 
-### Step 13. Upload the best_model folder in your S3 Bucket
+### Step 14: Upload the best_model folder in your S3 Bucket
 ```bash
 aws s3 cp /path/to/best_model s3://your-bucket-name/best_model --recursive
 ```
 
-### Step 14: Start the Celery Worker. In a new terminal window, activate the environment then run:
+### Step 15: Start the Celery Worker. In a new terminal window, activate the environment then run:
 ```bash
 celery -A celery_app worker --loglevel=info
 ```
 
-### Step 15: Run the FastAPI application. In another terminal, start your Flask application with Uvicorn
+### Step 16: Run the FastAPI application. In another terminal, start your FastAPI application with Uvicorn
 ```bash
 uvicorn app:app --host 0.0.0.0 --port 8080 --workers 2
 ```
 
-### Step 16: Prediction application
+### Step 17: Prediction application
 ```bash
 http://localhost:8080/
 ```
 
-### Step 17: If model is not trained and not present in your S3 bucket
+### Step 18: If model is not trained and not present in your S3 bucket
 ```bash
 Run the training Pipeline by clicking on train button in FastAPI UI
 ```
@@ -208,6 +208,7 @@ Run the training Pipeline by clicking on train button in FastAPI UI
 ## Prediction Outputs
 ![image](assets/Output1.png)
 ![image](assets/Output2.png)
+![image](assets/Output3.png)
 
 ## AWS Deployment Steps
 ### Step 1 - Login to AWS console.
@@ -243,12 +244,12 @@ Save your ECR URI: 022499021177.dkr.ecr.us-east-1.amazonaws.com/agnews
 
 ### Step 4 - Create EC2 machine (Ubuntu)
 ```bash
-Use t2.large or greater size instances only as it is a Computer Vision project
+Use t2.large or greater size instances only as it is a Natural Language Processing project
 ```
 
 ### Step 5 - Connect EC2 Instance and Install docker in EC2 Machine:
 
-### Run all the commands given in the **scripts/VM-machine-setup.sh** file, in the EC2 Instance Command Line.
+### Run all the commands given in the **circleci_setup_template.sh** file, in the EC2 Instance Command Line.
 
 ### Step 6 - Configure EC2 as self-hosted runner in CircleCI:
 ```bash
@@ -266,19 +267,26 @@ AWS_REGION = us-east-1
 AWS_ECR_REGISTRY_ID = "Your AWS account:ID"
 ```
 
-### Step 8 - Add Inbound Rules in EC2 Instance
-```bash
-Select your EC2 Instance--> Security groups--> Add Inbound Rules--> Custom TCP(8080 and 0.0.0.0)--> save
-```
+### Step 8 - Configure your inbound rule in EC2 Instance:
+1. Go inside the security
+2. Click on security group
+3. Configure your inbound rule with certain values
+4. Port 8080 0.0.0.0/0 for anywhere traffic TCP/IP protocol
+5. Port 6379 (Redis) 0.0.0.0/0 for anywhere traffic TCP/IP protocol
 
 ### Step 9 - Run the Public Port of EC2 Instance
 ```bash
-Public_Address:8080
+http://your-ec2-public-ip:8080
 ```
 
 ## Conclusion
 
+1. Successfully implemented an **end-to-end MLOps pipeline** for **AG News classification**, achieving state-of-the-art accuracy of **94.53%** with the **RoBERTa model**.
 
+2. Addressed scalability and reliability issues, such as server response timeouts, using **Redis and Celery** for asynchronous task handling.
 
+3. Deployed the pipeline to production using **AWS EC2 and ECR**, ensuring a robust and scalable infrastructure.
 
-b82aebe36b9b8e6069e58ebd040d5d868f7380f2fc642d9dbc47a47446da78f766d4b587a262ebd4
+4. **Automated CI/CD** processes with **CircleCI**, streamlining development, testing, and deployment workflows.
+
+5. Delivered a **user-friendly frontend integrated with a FastAPI backend**, providing real-time predictions and seamless interaction for users.
